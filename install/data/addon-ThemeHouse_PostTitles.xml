@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="ThemeHouse_PostTitles" title="[⌂] Post Titles" version_string="1.0.2" version_id="1447261019" url="http://xf.themehouse.io/" install_callback_class="ThemeHouse_Install" install_callback_method="install" uninstall_callback_class="ThemeHouse_Install" uninstall_callback_method="uninstall">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <admin_template_modifications>
+    <modification template="forum_edit" modification_key="th_forumEdit_postTitles" description="Add &quot;post titles&quot; option to forum editor." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<xen:hook name="admin_forum_edit_forum_options">\s*<xen:checkboxunit label="">.*)(</xen:checkboxunit>)#Us]]></find>
+      <replace><![CDATA[${1}
+<xen:option name="allow_post_titles" label="{xen:phrase th_allow_post_titles_in_this_forum_posttitles}" selected="{$forum.allow_post_titles_th}">
+	<xen:hint>{xen:phrase th_if_disabled_users_not_able_add_post_titles_in_forum_posttitles}</xen:hint>
+</xen:option>
+${2}
+<input type="hidden" name="allow_post_titles_shown" value="1" />]]></replace>
+    </modification>
+  </admin_template_modifications>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="controller_pre_dispatch" execute_order="10" callback_class="ThemeHouse_Listener_ControllerPreDispatch" callback_method="controllerPreDispatch" active="1" hint="" description=""/>
+    <listener event_id="file_health_check" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_FileHealthCheck" callback_method="fileHealthCheck" active="1" hint="" description=""/>
+    <listener event_id="init_dependencies" execute_order="10" callback_class="ThemeHouse_Listener_InitDependencies" callback_method="initDependencies" active="1" hint="" description=""/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassDataWriter" active="0" hint="XenForo_DataWriter_DiscussionMessage_Post" description="XenForo_DataWriter_DiscussionMessage_Post (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassController" active="0" hint="XenForo_ControllerPublic_Post" description="XenForo_ControllerPublic_Post (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassController" active="0" hint="XenForo_ControllerPublic_Thread" description="XenForo_ControllerPublic_Thread (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassModel" active="0" hint="XenForo_Model_Post" description="XenForo_Model_Post (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassHelper" active="0" hint="XenForo_ControllerHelper_ForumThreadPost" description="XenForo_ControllerHelper_ForumThreadPost (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassModel" active="0" hint="XenForo_Model_Thread" description="XenForo_Model_Thread (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassController" active="0" hint="XenForo_ControllerAdmin_Forum" description="XenForo_ControllerAdmin_Forum (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassDataWriter" active="0" hint="XenForo_DataWriter_Forum" description="XenForo_DataWriter_Forum (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class_controller" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassController" active="1" hint="" description="(For XenForo 1.1 and below)" compatibility_switch="1"/>
+    <listener event_id="load_class_datawriter" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassDataWriter" active="1" hint="" description="(For XenForo 1.1 and below)" compatibility_switch="1"/>
+    <listener event_id="load_class_helper" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassHelper" active="1" hint="" description="(For XenForo 1.1 and below)" compatibility_switch="1"/>
+    <listener event_id="load_class_model" execute_order="10" callback_class="ThemeHouse_PostTitles_Listener_LoadClass" callback_method="loadClassModel" active="1" hint="" description="(For XenForo 1.1 and below)" compatibility_switch="1"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups>
+    <group group_id="th_postTitles" display_order="2000" debug_only="0"/>
+    <option option_id="th_postTitles_allowTitleInFirstPost" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>0</default_value>
+      <edit_format_params/>
+      <sub_options/>
+      <relation group_id="th_postTitles" display_order="100"/>
+    </option>
+    <option option_id="th_postTitles_postTitlesFromOtherThreads" edit_format="spinbox" data_type="unsigned_integer" can_backup="1">
+      <default_value>30</default_value>
+      <edit_format_params/>
+      <sub_options/>
+      <relation group_id="th_postTitles" display_order="1"/>
+    </option>
+    <option option_id="th_postTitles_titlesInOverlay" edit_format="spinbox" data_type="positive_integer" can_backup="1">
+      <default_value>50</default_value>
+      <edit_format_params>min=3</edit_format_params>
+      <sub_options/>
+      <relation group_id="th_postTitles" display_order="10"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="option_group_th_postTitles" version_id="1427483432" version_string="1.0.0"><![CDATA[Post Titles by ThemeHouse]]></phrase>
+    <phrase title="option_group_th_postTitles_description" version_id="1427483432" version_string="1.0.0"><![CDATA[Options for the Post Titles by ThemeHouse add-on.]]></phrase>
+    <phrase title="option_th_postTitles_allowTitleInFirstPost" version_id="1427708176" version_string="1.0.0"><![CDATA[Allow Post Title in First Post]]></phrase>
+    <phrase title="option_th_postTitles_allowTitleInFirstPost_explain" version_id="1427708176" version_string="1.0.0"><![CDATA[]]></phrase>
+    <phrase title="option_th_postTitles_postTitlesFromOtherThreads" version_id="1427483432" version_string="1.0.0"><![CDATA[Titles from Other Pages in Sidebar]]></phrase>
+    <phrase title="option_th_postTitles_postTitlesFromOtherThreads_explain" version_id="1427483432" version_string="1.0.0"><![CDATA[This is the maximum number of post titles from other pages in the thread to be shown in the sidebar. Unless set to 0, this will add an extra query when viewing a thread which contains post titles unless all the post titles are on the page being viewed.]]></phrase>
+    <phrase title="option_th_postTitles_titlesInOverlay" version_id="1427483432" version_string="1.0.0"><![CDATA[Titles per Page in Overlay]]></phrase>
+    <phrase title="option_th_postTitles_titlesInOverlay_explain" version_id="1427483432" version_string="1.0.0"><![CDATA[This is the maximum number of post titles shown per page when viewing the overlay showing all of the post titles in a thread.]]></phrase>
+    <phrase title="th_allow_post_titles_in_this_forum_posttitles" version_id="1427709096" version_string="1.0.0"><![CDATA[Allow post titles in this forum]]></phrase>
+    <phrase title="th_edit_post_posttitles" version_id="1427483432" version_string="1.0.0"><![CDATA[Edit Post]]></phrase>
+    <phrase title="th_if_disabled_users_not_able_add_post_titles_in_forum_posttitles" version_id="1427709096" version_string="1.0.0"><![CDATA[If disabled, users will not be given the option to add a post title to a new post or existing post without a post title. Existing post titles will still be able to be edited or removed.]]></phrase>
+    <phrase title="th_in_this_thread_posttitles" version_id="1427483432" version_string="1.0.0"><![CDATA[In This Thread]]></phrase>
+    <phrase title="th_on_this_page_posttitles" version_id="1427483432" version_string="1.0.0"><![CDATA[On This Page]]></phrase>
+    <phrase title="th_post_titles_in_x_posttitles" version_id="1427483432" version_string="1.0.0"><![CDATA[Post Titles in {thread}]]></phrase>
+    <phrase title="th_post_titles_posttitles" version_id="1427483432" version_string="1.0.0"><![CDATA[Post Titles]]></phrase>
+    <phrase title="th_post_title_ellipses_posttitles" version_id="1427483432" version_string="1.0.0"><![CDATA[Post Title...]]></phrase>
+    <phrase title="th_there_are_no_post_titles_in_this_thread_posttitles" version_id="1427483432" version_string="1.0.0"><![CDATA[There are no post titles in this thread.]]></phrase>
+    <phrase title="th_there_are_no_post_titles_on_this_page_posttitles" version_id="1427483432" version_string="1.0.0"><![CDATA[There are no post titles on this page.]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates>
+    <template title="th_message_posttitles" version_id="1427709096" version_string="1.0.0"><![CDATA[<xen:if is="{$message.post_title}">
+	<div class="muted postTitle postTitle-{$post.post_id}">{$message.post_title}</div>
+</xen:if>]]></template>
+    <template title="th_post_edit_inline_posttitles.css" version_id="1427483432" version_string="1.0.0"><![CDATA[.ctrlUnit.fullWidth
+{
+	overflow: visible;
+}
+
+.ctrlUnit.fullWidth dt
+{
+	float: none;
+	width: auto;
+	text-align: left;
+	height: auto;
+	margin-bottom: 2px;
+}
+
+.ctrlUnit.fullWidth > dd
+{
+	float: none;
+	width: auto;
+}
+
+.ctrlUnit.fullWidth > dd > input
+{
+	margin-top: 0;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.ctrlUnit.surplusLabel dt label {
+	display: none;
+}]]></template>
+    <template title="th_post_titles_posttitles" version_id="1427709096" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase th_post_titles_in_x_posttitles, 'thread={$thread.title}'}</xen:title>
+
+<xen:container var="$head.noindex">
+	<meta name="robots" content="noindex" /></xen:container>
+
+<xen:navigation>
+	<xen:breadcrumb source="$nodeBreadCrumbs" />
+	<xen:breadcrumb href="{xen:link full:threads, $thread}">{$thread.title}</xen:breadcrumb>
+</xen:navigation>
+
+<div class="section PostTitles">
+<xen:if is="{$posts}">
+	<ol class="overlayScroll">
+	<xen:foreach loop="$posts" value="$post">
+		<li class="primaryContent postTitle" id="post-{$post.post_id}"><a href="{xen:link full:threads/post-permalink, $thread, 'post={$post}'}" class="OverlayCloser">{$post.post_title}</a></li>
+	</xen:foreach>
+	</ol>
+	<div class="sectionFooter">
+		<a class="button primary OverlayCloser overlayOnly">{xen:phrase close}</a>
+		<xen:if is="{$hasMore}"><a class="button OverlayCloser OverlayTrigger" href="{xen:link threads/post-titles, $thread, 'page={xen:calc "{$page} + 1"}'}">{xen:phrase more}...</a></xen:if>
+		&nbsp;
+	</div>
+<xen:else />
+	<div class="primaryContent">
+		<xen:if is="{$page} > 1">
+			{xen:phrase no_results_found}
+		<xen:else />
+			{xen:phrase th_there_are_no_post_titles_in_this_thread_posttitles}
+		</xen:if>
+	</div>
+	<div class="sectionFooter overlayOnly"><a class="button primary OverlayCloser">{xen:phrase close}</a></div>
+</xen:if>
+</div>]]></template>
+    <template title="th_thread_view_posttitles" version_id="1427709096" version_string="1.0.0"><![CDATA[<xen:sidebar>
+	<div class="section postTitleList">
+		<div class="secondaryContent">
+			<h3><a href="{xen:link threads/post-titles, $thread}" class="OverlayTrigger">{xen:phrase th_post_titles_posttitles}</a></h3>
+			<xen:if is="{$pagePostTitleCount}">
+				<h4 class="minorHeading">{xen:phrase th_on_this_page_posttitles}:</h4>
+				<ul class="postTitlesOnThisPage">
+					<xen:foreach loop="$posts" value="$post">
+						<xen:if is="{$post.post_title}">
+							<li class="postTitle postTitle-{$post.post_id}"><a href="{xen:link full:threads/post-permalink, $thread, 'post={$post}'}">{$post.post_title}</a></li>
+						</xen:if>
+					</xen:foreach>
+				</ul>
+			<xen:elseif is="!{$xenOptions.th_postTitles_postTitlesFromOtherThreads}" />
+				{xen:phrase th_there_are_no_post_titles_on_this_page_posttitles}
+			</xen:if>
+			<xen:if is="{$postTitles}">
+				<h4 class="minorHeading">{xen:phrase th_in_this_thread_posttitles}:</h4>
+				<ul class="postTitlesInThisThread">
+					<xen:foreach loop="$postTitles" value="$post">
+						<xen:if is="{$post.post_title}">
+							<li id="postTitle postTitle-{$post.post_id}"><a href="{xen:link full:threads/post-permalink, $thread, 'post={$post}'}">{$post.post_title}</a></li>
+						</xen:if>
+					</xen:foreach>
+				</ul>
+				<xen:if is="{xen:calc '{$pagePostTitleCount} + {xen:count $postTitles}'} < {$thread.post_title_count}">
+					<a href="{xen:link threads/post-titles, $thread}" class="OverlayTrigger">{xen:phrase show_all}</a>
+				</xen:if>
+			</xen:if>
+		</div>
+	</div>
+	<xen:include template="sidebar_share_page">
+		<xen:set var="$url">{xen:link canonical:forums}</xen:set>
+	</xen:include>
+</xen:sidebar>]]></template>
+  </templates>
+  <public_template_modifications>
+    <modification template="footer" modification_key="th_copyrightNotice_postTitles" description="Copyright notice for [⌂] Post Titles" execution_order="1" enabled="1" action="callback">
+      <find><![CDATA[/{xen:phrase (?:xenforo|extra)_copyright}/]]></find>
+      <replace><![CDATA[ThemeHouse_Listener_InitDependencies::copyrightNotice]]></replace>
+    </modification>
+    <modification template="message" modification_key="th_message_postTitle" description="Adds post title to post." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#<xen:hook name="message_content"#]]></find>
+      <replace><![CDATA[<xen:include template="th_message_posttitles" />
+${0}]]></replace>
+    </modification>
+    <modification template="post_edit_inline" modification_key="th_postEditInline_postTitles" description="Adds title field to post editor." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#<div.*{xen:raw \$editorTemplate}</div>#Us]]></find>
+      <replace><![CDATA[<xen:require css="th_post_edit_inline_posttitles.css" />
+<xen:if is="{$post.post_title} || {$forum.allow_post_titles_th} && ({$xenOptions.th_postTitles_allowTitleInFirstPost} || {$post.post_id} != {$thread.first_post_id})">
+	<div class="secondaryContent">
+		<dl class="ctrlUnit fullWidth surplusLabel">
+			<dt><label for="ctrl_post_title">{xen:phrase title}:</label></dt>
+			<dd>
+				<input type="text" name="post_title" class="textCtrl titleCtrl" id="ctrl_post_title" maxlength="100" placeholder="{xen:phrase th_post_title_ellipses_posttitles}" value="{$post.post_title}" />
+				<input type="hidden" name="post_title_shown" value="1" />
+			</dd>
+		</dl>
+	</div>
+</xen:if>
+${0}]]></replace>
+    </modification>
+    <modification template="post_edit" modification_key="th_postEdit_postTitles" description="Adds title field to post editor." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#<dl[^>]*>\s*<dt><label for="ctrl_message">#Us]]></find>
+      <replace><![CDATA[<xen:if is="{$post.post_title} || {$forum.allow_post_titles_th} && ({$xenOptions.th_postTitles_allowTitleInFirstPost} || {$post.post_id} != {$thread.first_post_id})">
+			<dl class="ctrlUnit fullWidth surplusLabel">
+				<dt><label for="ctrl_post_title">{xen:phrase title}:</label></dt>
+				<dd>
+					<input type="text" name="post_title" class="textCtrl titleCtrl" id="ctrl_post_title" maxlength="100" placeholder="{xen:phrase th_post_title_ellipses_posttitles}" value="{$post.post_title}" data-livetitletemplate="{xen:phrase th_edit_post_posttitles}: <em>%s</em>" />
+					<input type="hidden" name="post_title_shown" value="1" />
+				</dd>
+			</dl>
+		</xen:if>
+		${0}]]></replace>
+    </modification>
+    <modification template="quick_reply.css" modification_key="th_quickReplyCss_postTitles" description="Adds full width CSS." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#$#]]></find>
+      <replace><![CDATA[.quickReply .fullWidth .textCtrl
+{
+	box-sizing: border-box;
+	width: 100%;
+}]]></replace>
+    </modification>
+    <modification template="quick_reply" modification_key="th_quickReply_postTitles" description="Adds title field to quick reply." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#{xen:raw \$qrEditor}#]]></find>
+      <replace><![CDATA[<xen:require js="js/themehouse/posttitles/discussion.js" />
+
+<div class="fullWidth">
+	<input type="text" name="post_title" class="textCtrl titleCtrl" id="ctrl_post_title" maxlength="100" placeholder="{xen:phrase th_post_title_ellipses_posttitles}" />
+</div>
+
+${0}]]></replace>
+    </modification>
+    <modification template="thread_reply" modification_key="th_threadReply_postTitles" description="Adds title field to reply editor." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#<dl[^>]*>\s*<dt><label for="ctrl_message">#Us]]></find>
+      <replace><![CDATA[<xen:if is="{$forum.allow_post_titles_th}">
+			<dl class="ctrlUnit fullWidth surplusLabel">
+				<dt><label for="ctrl_post_title">{xen:phrase title}:</label></dt>
+				<dd>
+					<input type="text" name="post_title" class="textCtrl titleCtrl" id="ctrl_post_title" maxlength="100" placeholder="{xen:phrase th_post_title_ellipses_posttitles}" value="{$post.post_title}" data-livetitletemplate="{xen:phrase reply_to_thread}: <em>%s</em>" />
+					<input type="hidden" name="post_title_shown" value="1" />
+				</dd>
+			</dl>
+		</xen:if>
+		${0}]]></replace>
+    </modification>
+    <modification template="thread_view" modification_key="th_threadView_postTitles" description="Adds sidebar to post titles page." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#<xen:include template="share_page">.*</xen:include>#Us]]></find>
+      <replace><![CDATA[<xen:if is="{$thread.post_title_count}">
+	<xen:include template="th_thread_view_posttitles" />
+<xen:else />
+${0}
+</xen:if>]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
